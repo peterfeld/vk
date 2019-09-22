@@ -239,6 +239,7 @@ def msg_recomendation (user_id,keyboard,recomendation_profile_predict):
         vk_group.method('messages.send', {'user_id': user_id, 
            'message': 'К сожалению нам не удалось сделать рекомендацию',
             'keyboard': json.dumps(keyboard_back_error,ensure_ascii=False)}) 
+    return (target_id)
         
 
 
