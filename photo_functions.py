@@ -225,14 +225,21 @@ def write_msg(user_id, message, keyboard=None):
 def msg_recomendation (user_id,keyboard,recomendation_profile_predict):
     target_id=recomendation_profile_predict(user_id)
     target_foto_id=main_photo_id(target_id)
-    #write_msg(user_id, target_link, keyboard_what_to_write_next_5_or_back)
-    #recommend_profile_msg(user_id,target_id,keyboard_what_to_write_next_5_or_back)
-    if target_foto_id is not None:
-        vk_group.method('messages.send', {'user_id': user_id, 
-                   'message': 'Вот страничка девушки https://vk.com/id' + str(target_id),
-                    'attachment': 'photo'+target_foto_id,
-                    'keyboard': json.dumps(keyboard,ensure_ascii=False)}) 
+    if target_id is not None:
+        if target_foto_id is not None:
+            vk_group.method('messages.send', {'user_id': user_id, 
+                       'message': 'Вот страничка девушки https://vk.com/id' + str(target_id),
+                        'attachment': 'photo'+target_foto_id,
+                        'keyboard': json.dumps(keyboard,ensure_ascii=False)}) 
+        else:
+            vk_group.method('messages.send', {'user_id': user_id, 
+                       'message': 'Вот страничка девушки https://vk.com/id' + str(target_id),
+                        'keyboard': json.dumps(keyboard,ensure_ascii=False)}) 
     else:
         vk_group.method('messages.send', {'user_id': user_id, 
-                   'message': 'Вот страничка девушки https://vk.com/id' + str(target_id),
-                    'keyboard': json.dumps(keyboard,ensure_ascii=False)}) 
+           'message': 'К сожалению нам не удалось сделать рекомендацию',
+            'keyboard': json.dumps(keyboard_back_error,ensure_ascii=False)}) 
+        
+
+
+

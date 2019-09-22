@@ -80,14 +80,14 @@ keyboard_what_to_write_next_5_or_back = {
         "action": { 
           "type": "text", 
           "payload": "{\"button\": \"1\"}", 
-          "label": "Что написать?" 
+          "label": "Не нравится" 
         }, 
-        "color": "positive"
+        "color": "negative"
       }, { 
         "action": { 
           "type": "text", 
           "payload": "{\"button\": \"2\"}", 
-          "label": "Следующие 5" 
+          "label": "Нравится" 
         }, 
         "color": "positive"
       }], 
@@ -97,7 +97,7 @@ keyboard_what_to_write_next_5_or_back = {
           "payload": "{\"button\": \"3\"}", 
           "label": "Назад" 
         }, 
-        "color": "negative" 
+        "color": "secondary" 
       }]
     ] 
   } 
@@ -124,7 +124,7 @@ keyboard_next_5_or_back = {
         "action": { 
           "type": "text", 
           "payload": "{\"button\": \"2\"}", 
-          "label": "Следующие 5"
+          "label": "Следующая девушка"
         }, 
         "color": "positive"
       }, 
@@ -171,6 +171,18 @@ keyboard_what_to_write = {
     ] 
 
   } 
+
+keyboard_back_error = { 
+    "one_time": True, 
+    "buttons": [ 
+      [{ 
+        "action": { 
+          "type": "text", 
+          "payload": "{\"button\": \"1\"}", 
+          "label": "Главное меню" 
+        }, 
+        "color": "primary"
+      }]]}
 
 message_2_1 = """
 Вот девушки, которые наилучше подходят тебе для отношений по мнению нашего алгоритма:
