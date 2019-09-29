@@ -2,7 +2,7 @@ import os.path
 import warnings
 
 import pandas as pd
-from functions import predict_1_user
+from functions import predict_1_user,model_df_for_user_wo_w2v
 from settings import model_f, features_for_model_f, likes_f, \
     df_for_predict_f, path_to_save
 # import time
@@ -37,3 +37,20 @@ def recomendation_profile_predict(id_name):
         user_recomendations.loc[:, 'saw'] = 0
         user_recomendations.to_pickle(path_user)
         return (None)
+
+def recomendation_score_2_users(id_name,id_target):
+    try:
+        path_score_2_users = path_to_save + '\\score_2_users.pkl'
+        if os.path.exists(path_score_2_users):
+            user_score_2_users = pd.read_pickle(path_score_2_users)
+        else:
+            woman_df=model_df_for_user_wo_w2v(id_target,likes_total_1user)
+            score = predict_1_user(id_name, woman_df, likes_total_1user, model_info).score[0]
+            # rec=['https://vk.com/id'+str(x) for x in rec_profile.values]
+            score_2_users = pd.DataFrame({'id_user': id_name, 'id_target':id_target, 'score': score})
+
+        user_score_2_users=pd.concat([user_score_2_users,score_2_users])
+        user_score_2_users.to_pickle(path_score_2_users)
+        return (score)
+    except:
+        return(None)

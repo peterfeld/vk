@@ -168,7 +168,8 @@ def model_df_for_user_wo_w2v(id_search,likes_total_1user):
 
             df_user=pd.concat([df_final.T,friends_df,likes_total_df,groups_df,type_groups_model_df],axis=1)
             ###
-            df_user.columns = [y+x for x,y in zip(['_m']*len(df_user.columns), df_user.columns)]
+            sex=['_m'] if df_user.sex[0]==2 else ['_w']
+            df_user.columns = [y+x for x,y in zip(sex*len(df_user.columns), df_user.columns)]
             df_user['key'] = 1
             df_user=df_user.replace('',np.nan)
             df_user.fillna(0,inplace=True)
