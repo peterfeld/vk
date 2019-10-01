@@ -2,3 +2,4 @@
 recomendation_profile/required_files/df_for_predict_women_1204.pickle
 recomendation_profile/required_files/likes_total.csv
 Data/Precalculated_Embeddings/final_photos_for_pilot_15_04_19.pkl
+*.pkl
