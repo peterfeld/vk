@@ -20,7 +20,15 @@ keyboard_all_func = {
         }, 
         "color": "positive" 
       }], 
-     [{ 
+     [     { 
+        "action": { 
+          "type": "text", 
+          "payload": "{\"button\": \"3\"}", 
+          "label": "Вероятность отношений" 
+        }, 
+        "color": "positive" 
+      },
+         { 
         "action": { 
           "type": "text", 
           "payload": "{\"button\": \"8\"}", 
