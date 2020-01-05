@@ -35,6 +35,9 @@ import cv2
 from tqdm import tqdm
 from time import time
 
+import requests
+from bs4 import BeautifulSoup
+
 # some constants kept as default from facenet
 minsize = 20
 threshold = [0.6, 0.7, 0.7]
@@ -96,15 +99,20 @@ def main_photo_id(user_id):
 def load_embeddings_1_user_2_photos(user_id):
     """Возвращает эмбеддинг главного фото со страницы по идентификатору пользователя"""
 
-    photo_id = main_photo_id(user_id)
-    photo = vk.photos.getById(photos=photo_id)
+    try:
+        photo_id = main_photo_id(user_id)
+        photo = vk.photos.getById(photos=photo_id)
 
-    photo_user_id = photo[0]['owner_id']
-    photo_604 = photo[0]['photo_604']
-            
+        photo_user_id = photo[0]['owner_id']
+        photo_604 = photo[0]['photo_604']
+
+    except:
+        photo_user_id = 'no_photo_user_id'
+        photo_604 = 'no_photo_url'
+
     len_1 = 0 # Кол-во лиц
     embeddings_1 = [] # Эмбеддинги
-    
+
     try:
         photo_path = str(int(photo_user_id))
         urlretrieve(photo_604,photo_path) # Выгрузка главного фото
@@ -119,18 +127,39 @@ def load_embeddings_1_user_2_photos(user_id):
         os.remove(photo_path) # Удаляем фото
 
     except:
-        len_1 = len_1
+        try:
+            # Предположим, что это закрытый профиль, пробуем выгрузить по прямой ссылке
+            photo_path = str(user_id)
+
+            url = 'https://www.vk.com/'+str(user_id) # url для второй страницы
+            
+            html_text = vk_session.http.get(url)
+            soup = BeautifulSoup(html_text.text)
+            main_photo_url = soup.find('img', {'class': 'page_avatar_img'})['src']
+
+            urlretrieve(main_photo_url,photo_path) # Выгрузка главного фото
+
+            img = cv2.imread(photo_path) # Считали фото
+            face = getFace(img) # Сделали эмбеддинг
+
+            len_1 = len(face)
+            if len_1>0:
+                embeddings_1 = face[0]['embedding']
+
+            os.remove(photo_path) # Удаляем фото
+        except:
+            len_1 = len_1
 
     len_2 = 0 # Кол-во лиц
     embeddings_2 = [] # Эмбеддинги
-    
+
     try:
         # Пытаемся выгрузить еще одно фото пользователя
         photos = vk.photos.get(owner_id=int(photo_user_id), album_id='profile') # Все фото профиля
         url= photos['items'][-2]['photo_1280'] # Url главного фото
         photo_path = str(int(photo_user_id)) + '_2'
         urlretrieve(url,photo_path) # Выгрузка главного фото
-        
+
         img = cv2.imread(photo_path) # Считали фото
         face = getFace(img) # Сделали эмбеддинг
 
@@ -139,12 +168,12 @@ def load_embeddings_1_user_2_photos(user_id):
             embeddings_2 = face[0]['embedding']
 
         os.remove(photo_path) # Удаляем фото
-        
+
     except:
         len_2 = len_2
 
     emb_df = pd.DataFrame({'id':[photo_user_id],'len_1':[len_1],'embeddings_1':[embeddings_1],
-                           'len_2':[len_2],'embeddings_2':[embeddings_2]})
+                                                'len_2':[len_2],'embeddings_2':[embeddings_2]})
     
     return emb_df
 
