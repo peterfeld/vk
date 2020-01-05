@@ -27,16 +27,16 @@ def recomendation_profile_predict(id_name):
         rec_profile = predict_1_user(id_name, data_for_predict, likes_total_1user, model_info).id[:100]
         # rec=['https://vk.com/id'+str(x) for x in rec_profile.values]
         user_recomendations = pd.DataFrame({'rec_profile': rec_profile, 'saw': 0})
-
-    results = user_recomendations.loc[user_recomendations.saw == 0, 'rec_profile'].values[0]
-    user_recomendations.loc[user_recomendations.rec_profile == results, 'saw'] = 1
-    user_recomendations.to_pickle(path_user)
-    if results is not None:
-        return (results)
+    if len(user_recomendations.loc[user_recomendations.saw == 0, 'rec_profile'].values)>0:
+        results = user_recomendations.loc[user_recomendations.saw == 0, 'rec_profile'].values[0]
+        user_recomendations.loc[user_recomendations.rec_profile == results, 'saw'] = 1
+        user_recomendations.to_pickle(path_user)
     else:
         user_recomendations.loc[:, 'saw'] = 0
+        results = user_recomendations.loc[user_recomendations.saw == 0, 'rec_profile'].values[0]
         user_recomendations.to_pickle(path_user)
-        return (None)
+    if results is not None:
+        return (results)
 
 def recomendation_score_2_users(id_name,id_target):
     try:
