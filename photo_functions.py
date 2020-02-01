@@ -252,6 +252,7 @@ def write_msg(user_id, message, keyboard=None):
                                     'message': message,
                                     'keyboard':json.dumps(keyboard,ensure_ascii=False)})
 def msg_recomendation (user_id,keyboard,recomendation_profile_predict):
+    global avg_score
     target_id=recomendation_profile_predict(user_id)
     target_foto_id=main_photo_id(target_id)
     if target_id is not None:
@@ -269,7 +270,10 @@ def msg_recomendation (user_id,keyboard,recomendation_profile_predict):
            'message': 'К сожалению нам не удалось сделать рекомендацию',
             'keyboard': json.dumps(keyboard_back_error,ensure_ascii=False)}) 
     return (target_id)
-        
+
+def get_main_id_num(x):
+    return (vk.users.get(user_ids=x)[0]['id'])
+
 
 
 

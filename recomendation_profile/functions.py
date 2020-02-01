@@ -281,17 +281,21 @@ def predict_1_user(id_search,data_for_predict,files_for_1_user,model_info):
             id_w = X.id_w.values
             X=X[list_features_correct]
             print('Предсказание : {:>9.2f}'.format(time.monotonic()-start))
-            y_pred = loaded_model.predict(X)
+            y_pred = loaded_model.predict_proba(X)[:,1]
             print('Сбор результата... : {:>9.2f}'.format(time.monotonic()-start))
             user_predict = pd.DataFrame({'id':id_w,'score':y_pred})   
             user_predict.id=user_predict.id.astype(int)
             user_predict['client_id'] = id_search 
-            user_predict = user_predict.sort_values('score',ascending=False).head(60)
+            #
+            mean_score=user_predict.score.mean()
+            #
+            user_predict = user_predict.sort_values('score',ascending=False).head(100)
             print('Расчет окончен... : {:>9.2f}'.format(time.monotonic()-start))
-            return (user_predict)
+            return (user_predict,mean_score)
         except:
             print ('ошибка предикт')
-            return(np.nan)
-    else:
-        print ('не удалось выгрузить пользователя')
-        return (np.nan)
+            return(np.nan,np.nan)
+        
+def normalise_score(x,mean_score):
+    if x<mean_score: return (x/mean_score*0.5)
+    else: return (1/(1+np.exp(-x/mean_score+1)))
