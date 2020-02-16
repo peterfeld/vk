@@ -59,6 +59,9 @@ embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")
 phase_train_placeholder = tf.get_default_graph().get_tensor_by_name("phase_train:0")
 embedding_size = embeddings.get_shape()[1]
 
+global avg_score
+global write_msg
+
 def getFace(img):
     faces = []
     img_size = np.asarray(img.shape)[0:2]
@@ -251,9 +254,9 @@ def write_msg(user_id, message, keyboard=None):
         vk_group.method('messages.send', {'user_id': user_id, 
                                     'message': message,
                                     'keyboard':json.dumps(keyboard,ensure_ascii=False)})
-def msg_recomendation (user_id,keyboard,recomendation_profile_predict):
-    global avg_score
-    target_id=recomendation_profile_predict(user_id)
+def msg_recomendation (user_id,keyboard,recomendation_profile_predict,avg_score):
+    global write_msg
+    target_id=recomendation_profile_predict(user_id,write_msg,avg_score)
     target_foto_id=main_photo_id(target_id)
     if target_id is not None:
         if target_foto_id is not None:
