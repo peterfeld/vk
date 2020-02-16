@@ -90,10 +90,15 @@ def df_for_1User(response_id):
     df_for_user=pd.DataFrame(index=[0])
     ### день, месяц, год рождения
     if 'bdate' in df.columns:
-        bd=pd.to_datetime(df['bdate'],format="%d.%m.%Y")[0]
-        df_for_user.loc[:,'year'] = bd.year
-        df_for_user.loc[:,'month'] = bd.month
-        df_for_user.loc[:,'day'] = bd.day
+        try:
+            bd=pd.to_datetime(df['bdate'],format="%d.%m.%Y")[0]
+            df_for_user.loc[:,'year'] = bd.year
+            df_for_user.loc[:,'month'] = bd.month
+            df_for_user.loc[:,'day'] = bd.day
+        except:
+            df_for_user.loc[:,'year'] = np.nan
+            df_for_user.loc[:,'month'] = np.nan
+            df_for_user.loc[:,'day'] = np.nan
     bool_col=list(features[(features.Take=='yes')&(features.Type=='bool')]['All_columns'])
     int_col=list(features[(features.Take=='yes')&(features.Type=='int')]['All_columns'])
     df_for_user=pd.concat([df_for_user,df[[i for i in bool_col+int_col if i in list(df.columns)]]],axis=1)
