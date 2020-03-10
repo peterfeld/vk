@@ -9,14 +9,14 @@ import json
 import datetime
 
 session = requests.Session()
-login, password = '79256581763', '3myS2DX'
+login, password = '79261797300','Gtnthatkml+2103!'
 vk_session = vk_api.VkApi(login, password)
 try:
     vk_session.auth(token_only=True)
 except vk_api.AuthError as error_msg:
     print(error_msg)
 
-app_id, login, password = '6145959', '79256581763', '3myS2DX'
+app_id, login, password = '6145959', '79261797300','Gtnthatkml+2103!'
 session = vk.AuthSession(app_id, login, password)
 vk = vk.API(session, v='5.62')
 
