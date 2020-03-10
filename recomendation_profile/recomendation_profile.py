@@ -50,7 +50,7 @@ def recomendation_score_2_users(id_name,id_target,avg_score,user_score_2_users):
         path_score_2_users = path_to_save + '\\score_2_users.pkl'
         path_avg_score=path_to_save + '\\avg_score.pkl'
         path_user = path_to_save + '\\' + str(id_name) + '.pkl'
-        if os.path.exists(path_user):
+        if len(avg_score.loc[avg_score.id_user==id_name,'avg_score'])>0:
             mean_score=avg_score.loc[avg_score.id_user==id_name,'avg_score'].values[0]
         else:
             rec_profile,mean_score=predict_1_user(id_name, data_for_predict, likes_total_1user, model_info)

@@ -4,8 +4,9 @@ import os.path
 
 ######### Для выгрузки 1 пользователя ######### ниже для предикт
 name_folder_chat='\\recomendation_profile\\'
-login_name='79261797300'
-password_name ='Gtnthatkml+2103!'
+login_name='79814666268'
+password_name ='141994Hopine47'
+
 
 likes_f=os.path.abspath(os.curdir)+name_folder_chat+'required_files\\likes_total.csv'
 group_type_group_f='required_files/groups_type_groups.csv'
